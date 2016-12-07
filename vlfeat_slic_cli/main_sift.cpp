@@ -239,7 +239,7 @@ float* transf_point(Mat *im)
 
 
 
-/*
+
 
 //Convertit l image en entree en vecteur de float
 
@@ -264,7 +264,7 @@ vector<float> transf_vect(Mat *im)
 
 }
 
-
+/*
 //Convertit le vecteur  en entree en pointeur
 
 template<typename T>
@@ -668,17 +668,19 @@ vector<vector<vector<vl_sift_pix> > > ens_sift_descr(string chemin, int nb_octav
 		vector<vector<vl_sift_pix> > test2;
 		int largeur_image;
 		int hauteur_image;
-
+		clock_t begin;
+		clock_t end;
+		double elapsed_time;
 		//Extraction du chemin de chaque fichier presents dans le repertoire localise dans la varible chemin
 		vector<string> fichiers = ensemble_fichier(chemin.c_str());
 
 		cout<<"Nombre de fichiers "<<fichiers.size()<<endl;
-		
-		cout<<"Nom du premier fichier "<<fichiers[0]<<endl;
 
 		//Pour chaque fichier :
 		for(unsigned int i = 0 ; i < fichiers.size() ; i++)
 		{
+
+			cout<<"Nom du fichier "<<i<<" : "<<fichiers[i]<<endl;
 
 			//Creation d un objet im a partir du fichier image consideree
 			im = imread(fichiers[i], -1);
@@ -691,9 +693,20 @@ vector<vector<vector<vl_sift_pix> > > ens_sift_descr(string chemin, int nb_octav
 			//Convertit l image en pointeur float
 			image = transf_point(&im);
 
+			begin = clock();
+
 			//Calcul du descripteur associe a l image consideree
 			test2 =  sift_descr(image, largeur_image, hauteur_image, nb_octaves, nb_niveaux, octave_init , seuil_courbure_contours,
 				seuil_extrema_locaux, taille_region, taille_fenetre );
+
+			end = clock();
+
+			elapsed_time = double(end - begin) / CLOCKS_PER_SEC;
+
+			cout<<"Nombre de descripteurs pour l image "<<i<<" : "<<test2.size()<<endl;
+			
+			cout<<"Temps creation descripteurs de l image  "<<i<<" : "<<elapsed_time<<endl;
+
 			images_descriptor.push_back( test2 );
 			free(image);
 
@@ -2166,26 +2179,15 @@ int main()
 	double seuil_extrema_locaux = 0;
 	double taille_region = 4;
 	double taille_fenetre = 2;
-
-	string chemin = "/user/8/legrosq/Documents/HPC/vlfeat-slic-example/images";	
-
+	
+	string chemin = "../images";	
+	
 	vector<vector<vector<vl_sift_pix> > > descripteurs_lena =  ens_sift_descr(chemin, nb_octaves, nb_niveaux, octave_init, seuil_courbure_contours, seuil_extrema_locaux, 		taille_region, taille_fenetre );
 
 
-	cout<<"Nombre d'images : "<<descripteurs_lena.size()<<endl;
-	cout<<"Nombre de descripteurs pour la premiere image : "<<descripteurs_lena[0].size()<<endl;
-	cout<<"Nombre de descripteurs pour la seconde image : "<<descripteurs_lena[1].size()<<endl;
 	cout<<"Taille descripteur : "<<descripteurs_lena[0][0].size()<<endl;
-	cout<<"Descripteur : "<<endl;
-	for(unsigned int i = 0 ; i < descripteurs_lena[0][0].size() ; i++){
-	
-		cout<<descripteurs_lena[0][0][i]<<endl;
-	
-
-	}
 
 
-	cout<<"coucou"<<endl;
 	return 0;
 
 }

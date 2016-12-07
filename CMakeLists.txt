@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
+find_package(MPI REQUIRED)
 
 project(vlfeat_slic_example)
+
+include_directories(SYSTEM ${MPI_INCLUDE_PATH})
+include_directories(${MPI_INCLUDE_PATH})
+add_subdirectory(vlfeat_slic_cli)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
@@ -49,4 +54,6 @@ lib_vlfeat/vl/mathop_sse2.c)
 
 
 
-add_subdirectory(vlfeat_slic_cli)
+
+
+
