@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-find_package(MPI REQUIRED)
+
 
 project(vlfeat_slic_example)
 

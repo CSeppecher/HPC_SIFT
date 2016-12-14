@@ -22,7 +22,8 @@
 //#include <tuple>
 #include <iomanip>
 //#include <vld.h>
-
+#include<mpi.h>
+#include<omp.h>
 
 
 
