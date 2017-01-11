@@ -4,16 +4,16 @@ find_package(OpenCV REQUIRED)
 find_package(Threads)
 
 find_package(OpenMP)
-#if (OPENMP_FOUND)
-#    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-#    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-#endif()
+if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
 
 find_package(MPI REQUIRED)
-if (MPI_FOUND)
-	SET(CMAKE_C_COMPILER mpicc)
-	SET(CMAKE_CXX_COMPILER mpicxx)
-endif()
+#if (MPI_FOUND)
+#	SET(CMAKE_C_COMPILER mpicc)
+#	SET(CMAKE_CXX_COMPILER mpicxx)
+#endif()
 
 
 include_directories(MPI_INCLUDE_PATH)
@@ -27,10 +27,10 @@ add_executable(SIFT_exe main_sift.cpp)
 #install (TARGETS SIFT_exe DESTINATION bin)
 
 #openmp
-#SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp)
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
 
 #mpi
-target_link_libraries(SIFT_exe ${MPI_LIBRARIES})
+#target_link_libraries(SIFT_exe ${MPI_LIBRARIES})
 target_link_libraries(SIFT_exe ${OpenCV_LIBS} vlfeat_slic pthread)
 
 

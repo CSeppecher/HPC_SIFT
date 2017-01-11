@@ -22,7 +22,7 @@
 //#include <tuple>
 #include <iomanip>
 //#include <vld.h>
-#include<mpi.h>
+//#include<mpi.h>
 #include<omp.h>
 
 
@@ -169,6 +169,7 @@ vector<vector<vl_sift_pix> > sift_descr(vl_sift_pix* image, int largeur_image, i
 			nb_pointscle = vl_sift_get_nkeypoints(filtresift);
 
 			//Pour chaque point cle :
+			#pragma omp parallel for
 			for(int i = 0 ; i <nb_pointscle ; i++ )
 			{
 
@@ -176,6 +177,7 @@ vector<vector<vl_sift_pix> > sift_descr(vl_sift_pix* image, int largeur_image, i
 				nb_orientations = vl_sift_calc_keypoint_orientations(filtresift,angles,(pointscle[k]+i));
 
 				//Pour chaque orientation :
+				#pragma omp for schedule(dynamic)
 				for(int j = 0; j<nb_orientations; j++)
 				{
 
@@ -185,13 +187,12 @@ vector<vector<vl_sift_pix> > sift_descr(vl_sift_pix* image, int largeur_image, i
 					temp.clear();
 
 					//On l'ajoute a la variable que l on va retourner
+					//#pragma omp target teams distribute parallel for map(from:sinTable[0:128])
+					//#pragma omp for schedule(nonmonotonic:dynamic)
 					for(int l = 0; l < 128 ; l++)
 					{
-
 						temp.push_back(descripteur[l]);
-
 					}
-
 					ensemble_descripteur.push_back(temp);
 
 				}
